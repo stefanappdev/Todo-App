@@ -93,56 +93,66 @@ function List (){
     
     const renderedList = todos.map(t=>{
 
-        return <li key={t.id}>
-                    
+        return <li className="w-[300px]  " key={t.id}>
 
-                    <CompleteTodo  todos={todos} Updatetodos_Status={Updatetodos_Status} t={t}/>
-                    
-                    <div>{t.text} </div>
+                    <div className=" w-[80%] text-white bg-[#25273c] h-[100px] inline-flex items-center justify-evenly pr-[30px]">
+                            
+                            <CompleteTodo  todos={todos} Updatetodos_Status={Updatetodos_Status} t={t}/>
+                            
+                            <p className="font-sm  w-[100%] mx-[20px]" >{t.text} </p>
 
-                    
+                            
 
-                    <div className="delete-todo-btn-container">
-                        <img className="delete-todo-btn" src="/images/icon-cross.svg" alt="delete item" onClick={()=>Removetodo(t.id)}/>
+                          
+
+                                
+
+                        {isEditting===false?
+                        <button className="mx-[20px]" onClick={
+                            ()=>{setIsEditting(true)
+                            setCurrentTodo(t)
+                            seteditText(t.text)
+                        }}>
+                                Edit
+                            </button>:""}
+
+
+                            
+                        <img className=" w-[20px] h-[20px] mx-[20px]  delete-todo-btn" src="/images/icon-cross.svg" alt="delete item" onClick={()=>Removetodo(t.id)}/>
+                            
+
+
                     </div>
-
-                        
-
-                   {isEditting===false?
-                   <button onClick={
-                    ()=>{setIsEditting(true)
-                    setCurrentTodo(t)
-                    seteditText(t.text)
-                   }}>
-                        Edit
-                    </button>:""}
-                    
                            
                 </li>
     })
 
     return(<>
-        <div>
+        <div className="  w-96 px-[20px] bg-[url(images/bg-mobile-dark.jpg)]">
 
+            
+
+           
+            <h1 className='text-left text-4xl font-bold text-white ' >T O D O</h1>
 
             {isEditting===false?
             
-            <form onSubmit={HandleSubmit}>
+            <form className="flex flex-col justify-center items-center my-[20px]" onSubmit={HandleSubmit}>
 
-                <h1>Add a Todo</h1>
-                <div>
+                
+                <div id="add-todo-form">
                     
-                    <input id="todo" 
+                    <input className="text-white bg-[#25273c] rounded-sm h-[40px] w-[300px] mx-2" id="todo" 
                     name="todo" 
-                    placeholder="Enter a newTodo item" 
+                    placeholder="Create a new todo.." 
                     onChange={e=>setText(e.target.value)} 
                     type="text"
                     value={Text}
                     />
-                       
+                     
                 </div>
 
-                <button type="submit"> + Add </button>
+                
             </form>: 
             <>
             <h1>Edit Todo</h1>
@@ -163,11 +173,18 @@ function List (){
 
             {isEditting===false?
             <>
-            <ul id="TodoList-section">
+            <ul id="TodoList-section" className="flex text-white bg-[#25273c] my-[20px] flex-col justify-center items-center" >
                  {todos.length===0?<h1>Its empty in here...Lets get Started</h1>:renderedList}
             </ul>
-
-            <span>{`active items left:${todos.filter(t=>t.status==="active").length}`}</span>
+            
+            {todos.length>0&&<div>
+                <span className="">{`items left:${todos.filter(t=>t.status==="active").length}`}</span>
+                <div>
+                    <span>All</span>
+                    <span>Active</span>
+                    <span>Completed</span>
+                </div>
+            </div>}
             </>
             :""}
 

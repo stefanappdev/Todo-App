@@ -30,7 +30,7 @@ const [isCompleted,setisCompleted]=useState(false);
  return(
  <div>
    
-      <div className="h-7 w-7 bg-sky-400 border-2 border-solid border-white rounded-full" onClick={()=>toggleStatus(t.id)}>
+      <div className=" mx-[20px] h-7 w-7 bg-sky-400 border-2 border-solid border-white rounded-full" onClick={()=>toggleStatus(t.id)}>
             {isCompleted&&<img className="h-7 w-7" src="/images/icon-check.svg"/>}
       </div>
 

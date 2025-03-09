@@ -1,7 +1,10 @@
+import status from "./status" 
+
 type Todo={
     id:number,
     text:string,
-    status:"active"|"completed"
+    status:status,
+   
 }
 
 

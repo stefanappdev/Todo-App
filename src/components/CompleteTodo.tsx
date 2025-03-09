@@ -1,27 +1,37 @@
 import { useState } from "react"
-import Todo from "../types/todo";
 
 
 
-function CompleteTodo({t}){
- const[Todo,setTodo]=useState(t);
- const [status,setStatus]=useState();
+function CompleteTodo({todos,Updatetodos_Status,t}){
+ 
 
- const handleStatus=(todo:Todo)=>{
-   if (todo.status==="active"){
-        setTodo({...Todo,status:"completed"})
-        setStatus(Todo.status)
-   }else{
-    setTodo({...Todo,status:"active"})
-    setStatus(Todo.status)
-   } 
+const [isCompleted,setisCompleted]=useState(false);
+
+ const toggleStatus=(id:number)=>{
+
+          let target=todos.find(t=>t.id===id);
+
+          if (!target){
+            return;
+          }
+
+          if(target.status==="completed"){
+             Updatetodos_Status(target.id,"active")
+             setisCompleted(false)
+          }else{
+               Updatetodos_Status(target.id,"completed") 
+               setisCompleted(true) 
+          }
+          
+     
+     
  }
 
  return(
  <div>
    
-      <div className="h-7 w-7 bg-sky-400 border-2 border-solid border-white rounded-full" onClick={()=>handleStatus(Todo)}>
-            {status==="completed"&&<img className="h-7 w-7" src="/images/icon-check.svg"/>}
+      <div className="h-7 w-7 bg-sky-400 border-2 border-solid border-white rounded-full" onClick={()=>toggleStatus(t.id)}>
+            {isCompleted&&<img className="h-7 w-7" src="/images/icon-check.svg"/>}
       </div>
 
 
@@ -31,4 +41,4 @@ function CompleteTodo({t}){
 }
 
 
-export default CompleteTodo
+export default CompleteTodo;

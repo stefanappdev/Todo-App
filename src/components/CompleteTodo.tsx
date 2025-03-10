@@ -1,11 +1,11 @@
-import { useState } from "react"
 
+import { useState } from "react";
 
 
 function CompleteTodo({todos,Updatetodos_Status,t}){
  
-
 const [isCompleted,setisCompleted]=useState(false);
+
 
  const toggleStatus=(id:number)=>{
 
@@ -30,9 +30,17 @@ const [isCompleted,setisCompleted]=useState(false);
  return(
  <div>
    
-      <div className=" mx-[20px] h-7 w-7 bg-sky-400 border-2 border-solid border-white rounded-full" onClick={()=>toggleStatus(t.id)}>
-            {isCompleted&&<img className="h-7 w-7" src="/images/icon-check.svg"/>}
+      {isCompleted&&t.status==="completed"?
+     <div className=" mx-[20px] h-7 w-7 bg-[#83a8ff] border-2 border-solid border-white rounded-full" onClick={()=>toggleStatus(t.id)}>
+               <img className="h-7 w-7" src="/images/icon-check.svg"/>
+     </div>
+          :
+      <div className=" mx-[20px] h-7 w-7 bg-[#83a8ff] border-2 border-solid border-white rounded-full" onClick={()=>toggleStatus(t.id)}>
+         
       </div>
+
+    
+     }
 
 
 

@@ -1,19 +1,24 @@
 
 import './styles/App.css'
+import{useContext} from "react";
+import { ThemeContextWrapper} from './components/contexts/Theme';
 import List from "./components/List";
 
 function App() {
  
 
   return (
-    <div>
-    
-     
-     
-     <List/>
 
-     
-    </div>
+    <ThemeContextWrapper >
+
+      
+        <div id="app">
+        
+        <List/>
+
+        
+        </div>
+    </ThemeContextWrapper>
   )
 }
 

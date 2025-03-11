@@ -2,6 +2,9 @@
 import { useState } from "react";
 
 
+
+///marks a todo as completed
+
 function CompleteTodo({todos,Updatetodos_Status,t}){
  
 const [isCompleted,setisCompleted]=useState(false);
@@ -30,7 +33,7 @@ const [isCompleted,setisCompleted]=useState(false);
  return(
  <div>
    
-      {isCompleted&&t.status==="completed"?
+      {t.status==="completed"?
      <div className=" mx-[20px] h-7 w-7 bg-[#83a8ff] border-2 border-solid border-white rounded-full" onClick={()=>toggleStatus(t.id)}>
                <img className="h-7 w-7" src="/images/icon-check.svg"/>
      </div>

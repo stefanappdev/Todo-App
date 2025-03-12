@@ -1,5 +1,8 @@
 import Todo from "../types/todo";
 import CompleteTodo from "./CompleteTodo"
+import { Removetodo,RemoveAlltodos, RemoveCompletedtodos    } from "./Removetodo";
+import { Addnewtodo } from "./Addnewtodo";
+import { Updatetodos } from "./Updatetodos"
 import status from "../types/status";
 import { useState,useRef,useContext } from "react";
 import { ThemeContext } from "./contexts/Theme";
@@ -17,52 +20,17 @@ function List (){
     const [Views,setViews]=
     useState(
         [{id:1,name:"All",isActive:false},{id:2,name:"Active",isActive:false},
-        {id:3,name:"Completed",isActive:false}]
+        {id:3,name:"Complete",isActive:false}]
     );
 
     const [editText,seteditText]=useState("");
     const [isEditting,setIsEditting]=useState(false);
     const editRef=useRef<HTMLInputElement>(null);
     const [Text,setText]=useState("")
+    let dragSrc:any;
 
 
 
-    const Addnewtodo=(text:string):void=>{
-        //add new item todo List(todos)
-
-        let existing=todos.find(t=>t.text===text);
-        if(existing){
-            alert("todo item already exist");
-            return
-        }
-
-        if(text===""){
-            alert("text cannot be blank for todo item ")
-            return
-        }  
-        
-        let id=Math.floor(Math.random()*100);
-
-        let newTodo:Todo={id:id,text:text,status:"active"};
-        setTodos([...todos,newTodo]);    
-    }
-
-    //removes a todo item
-
-    const Removetodo=(id:number):void=>{
-        const Remaining=todos.filter(t=>t.id!==id);
-        setTodos([...Remaining])
-    }
-
-
-    
-
-//updates a todo item with a new text
-    const Updatetodos=(id:number,text:string):void=>{
-
-        const updated=todos.map(t=>t.id === id ? {...t,text} : t); 
-        setTodos([...updated])
-    }
 
 
     //updates the active view of todo list
@@ -89,7 +57,7 @@ function List (){
             return
         }  
 
-        Updatetodos(currentTodo.id,editRef.current.value);
+        Updatetodos(currentTodo.id,editRef.current.value,todos,setTodos);
         alert("Todo item updated");
         seteditText("");
         setCurrentTodo(null)
@@ -101,10 +69,12 @@ function List (){
 //submits a new todo item
     const HandleSubmit=(event:any)=>{
         event.preventDefault();
-       Addnewtodo(Text); 
+       Addnewtodo(Text,setTodos,todos); 
        setText("");
-
     }
+
+    
+
 
 
     //lists of the different views of the todo list
@@ -124,7 +94,7 @@ function List (){
            <span className={view.isActive?"text-blue-700 font-bold":""}
 
             onClick={()=>{
-                if(view.name==="Completed"){
+                if(view.name==="Complete"){
                     setshowActivetodos(false)
                     setshowAlltodos(false);
                     setshowCompletedtodos(prev=>!prev);
@@ -169,8 +139,14 @@ function List (){
 
         return <li className={
             TC.isDark?
-            "w-[100%] h-[50px] border-b-[1px]  border-white  bg-[#25273c]  inline-flex items-center justify-evenly pr-[30px]":
-            " w-[100%] h-[50px] border-b-[1px]  border-white shadow-gray-500 shadow-lg bg-white inline-flex items-center justify-evenly pr-[30px]"}
+            `w-[85%] h-[50px] border-b-[1px] border-white  bg-[#25273c]  inline-flex items-center justify-evenly pr-[30px]
+             
+            `
+            
+            :
+            `w-[85%] h-[50px] border-b-[1px]   border-white shadow-gray-500 shadow-lg bg-white inline-flex items-center justify-evenly pr-[30px]
+             `
+            }
         key={t.id}>
 
               
@@ -194,7 +170,7 @@ function List (){
                             </button>:""}
                      </div>
 
-                    <img className=" w-[20px] h-[20px] mx-[20px]  delete-todo-btn" src="/images/icon-cross.svg" alt="delete item" onClick={()=>Removetodo(t.id)}/>
+                    <img className=" w-[20px] h-[20px] mx-[20px]  delete-todo-btn" src="/images/icon-cross.svg" alt="delete item" onClick={()=>Removetodo(t.id,todos,setTodos)}/>
                             
                    
                            
@@ -203,16 +179,16 @@ function List (){
 
     return(<>
         <div className={TC.isDark? 
-            "w-96 px-[20px] h-[200px] text-white bg-cover  bg-no-repeat bg-[url(images/bg-mobile-dark.jpg)]  " :
-             "w-96 px-[20px] h-[200px] text-black bg-cover bg-no-repeat bg-[url(images/bg-mobile-light.jpg)]"
+            "w-full px-[20px] h-[200px] text-white bg-cover  bg-no-repeat bg-[url(images/bg-mobile-dark.jpg)]  " :
+             "w-full px-[20px] h-[200px] text-black bg-cover bg-no-repeat bg-[url(images/bg-mobile-light.jpg)]"
              
              
              }>
 
        
 
-           <div className="flex items-center justify-between"> 
-            <h1 className='text-left text-4xl font-bold text-white ' >T O D O</h1>
+           <div className="flex items-center justify-evenly"> 
+            <h1 className='text-center text-4xl font-bold text-white ' >T O D O</h1>
             <img className=" w-[20px] h-[20px] mx-[25px] " src={TC.isDark?"/images/icon-sun.svg":"/images/icon-moon.svg"} alt="toggle theme" onClick={TC.toggleTheme}/>
            
            </div>
@@ -254,8 +230,11 @@ function List (){
             //and also the display section of the Todolist which shows the list of todos for the active view 
 
             <>
-            <h1 className="text-xl text-center font-bold my-[20px]">Edit Todo</h1>
-            <form onSubmit={HandleEditSubmit} id="edit-todo-form">
+                <h1 className={TC.isDark?"text-xl text-center font-bold my-[20px] text-white"
+                :"text-xl text-center font-bold my-[20px] text-white"}>
+                    Edit Todo
+                </h1>
+            <form onSubmit={HandleEditSubmit} id="edit-todo-form" className="inline-flex justify-center w-full items-center my-[20px]">
              <input className={TC.isDark?"text-white bg-[#25273c] rounded-sm h-[40px] w-[200px] mx-2":
                                     "text-black bg-white rounded-sm h-[40px] w-[200px] mx-2"} 
                     id="todo" 
@@ -272,43 +251,59 @@ function List (){
 
         </div>
 
-        <div className={TC.isDark?"bg-[rgba(22,22,32,255)] w-96 h-screen":"w-96 h-screen bg-[rgba(250,250,250,255)]"}>
+        <div className={TC.isDark?"bg-[rgba(22,22,32,255)] w-full h-screen":"w-full h-screen bg-[rgba(250,250,250,255)]"}>
         
 
             {isEditting===false?
-            <div className="absolute" id="display-section">
+            <div className="absolute  w-full" id="display-section">
             
           
 
             <ul id="TodoList" className={TC.isDark?
-            "flex text-white bg-none  my-[20px] mx-[20px] flex-col justify-center items-center"
+            "flex text-white bg-none w-full my-[20px] mx-[20px] flex-col justify-center items-center"
             :"flex text-black bg-none shadow-[#f5f5f7] shadow-lg  my-[20px] mx-[20px] flex-col justify-center items-center"
             
             } >
                  {renderedList.length===0?<h1 className="text-xl rounded-none">Its empty in here....</h1>:renderedList}
             </ul>
-            
-            {<div>
-               
                 
+            <div id="views" className="px-4 ml-4 flex flex-col justify-center items-center">
+                        
+                      
 
-                <div id="views" className={TC.isDark?
-                    "inline-flex h-[40px] justify-evenly gap-[10px] rounded-sm px-[5px] items-center my-[20px] mx-[10px]  w-[100%] text-white bg-[#25273c]":
-                    "inline-flex h-[40px] justify-evenly gap-[10px] rounded-sm px-[5px] items-center my-[20px] mx-[10px] shadow-gray-500 shadow-lg  w-[100%] text-black bg-white "}>
-                     
-                     <span className="">{`items left:${todos.filter(t=>t.status==="active").length}`}</span>
+                        
+                       <div className={TC.isDark?
+                            "inline-flex h-[40px] justify-center gap-[15px] rounded-sm px-[5px] items-center my-[20px] mx-[20px]  w-[100%] text-white bg-[#25273c]":
+                            "inline-flex h-[40px] justify-center gap-[15px] rounded-sm px-[5px] items-center my-[20px] mx-[20px] shadow-gray-500 shadow-lg  w-[100%] text-black bg-white "}> 
+                            
+                            <span className="">{`items left:${todos.filter(t=>t.status==="active").length}`}</span>
 
-                     
-                     {renderedviews}
-                   
+                            {renderedviews}
+                        
+                        </div>
+                       
+                        <div className={TC.isDark?"inline-flex mx-auto text-white":"inline-flex mx-auto text-black"}>
+
+                            <span className="mx-[10px] hover:text-red-500 cursor-pointer font-bold " onClick={()=>RemoveAlltodos(setTodos,todos)}>
+                                
+                                Clear All
+                            </span>
 
 
-                </div>
+                            <span  className="mx-[10px]  hover:text-red-500 font-bold cursor-pointer" onClick={()=>RemoveCompletedtodos(todos,setTodos)}>
+                           
+                            Clear completed
+                            </span>
 
 
-                   
+                        </div>
+                        
+            </div>
 
-            </div>}
+
+
+
+
             </div>
             :""}
 

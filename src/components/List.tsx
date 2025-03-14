@@ -1,5 +1,6 @@
 import Todo from "../types/todo";
 import '../styles/App.css'
+import CROSS from "../images/icon-cross.svg" 
 import CompleteTodo from "./CompleteTodo"
 import { Removetodo,RemoveAlltodos, RemoveCompletedtodos    } from "./Removetodo";
 import { Addnewtodo } from "./Addnewtodo";
@@ -7,6 +8,7 @@ import { Updatetodos } from "./Updatetodos"
 import status from "../types/status";
 import { useState,useRef,useContext } from "react";
 import { ThemeContext } from "./contexts/Theme";
+
 
 
 
@@ -178,7 +180,7 @@ function List (){
                             </button>:""}
                      </div>
 
-                    <img className=" w-[20px] h-[20px] mx-[20px]  delete-todo-btn" src="/images/icon-cross.svg" alt="delete item" onClick={()=>Removetodo(t.id,todos,setTodos)}/>
+                    <img className=" w-[20px] h-[20px] mx-[20px]  delete-todo-btn" src={CROSS} alt="delete item" onClick={()=>Removetodo(t.id,todos,setTodos)}/>
                             
                    
                            
@@ -199,13 +201,13 @@ function List (){
 
     return(<>
         <div className={TC.isDark? 
-            `w-full px-[20px] h-[200px] text-white bg-cover  bg-no-repeat bg-[url(images/bg-mobile-dark.jpg)] 
-             lg:bg-cover lg:bg-no-repeat lg:bg-[url(images/bg-desktop-dark.jpg)]
+            `w-full px-[20px] h-[200px] text-white bg-cover  bg-no-repeat bg-[url(/images/bg-mobile-dark.jpg)] 
+             lg:bg-cover lg:bg-no-repeat lg:bg-[url(/images/bg-desktop-dark.jpg)]
             `
                 
             :
-             `w-full px-[20px] h-[200px] text-black bg-cover bg-no-repeat bg-[url(images/bg-mobile-light.jpg)]
-             lg:bg-cover lg:bg-no-repeat lg:bg-[url(images/bg-desktop-light.jpg)]
+             `w-full px-[20px] h-[200px] text-black bg-cover bg-no-repeat bg-[url(/images/bg-mobile-light.jpg)]
+             lg:bg-cover lg:bg-no-repeat lg:bg-[url(/images/bg-desktop-light.jpg)]
              `
              
              
@@ -215,7 +217,7 @@ function List (){
 
            <div className="flex items-center justify-evenly"> 
             <h1 className='text-center text-4xl font-bold text-white ' >T O D O</h1>
-            <img className=" w-[20px] cursor-pointer h-[20px] mx-[25px] " src={TC.isDark?"/images/icon-sun.svg":"/images/icon-moon.svg"} alt="toggle theme" onClick={TC.toggleTheme}/>
+            <img className=" w-[50px] cursor-pointer h-[50px] mx-[25px] " src={TC.isDark?"/images/icon-sun.svg":"/images/icon-moon.svg"} alt="toggle theme" onClick={TC.toggleTheme}/>
            
            </div>
            

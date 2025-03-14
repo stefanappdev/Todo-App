@@ -1,6 +1,7 @@
 
 import { useState } from "react";
-
+import TICK from "../images/icon-check.svg"
+import "../styles/App.css"
 
 
 ///marks a todo as completed
@@ -35,7 +36,7 @@ const [isCompleted,setisCompleted]=useState(false);
    
       {t.status==="completed"?
      <div className=" mx-[20px] h-7 w-7 bg-[#83a8ff] border-2 border-solid border-white rounded-full" onClick={()=>toggleStatus(t.id)}>
-               <img className="h-7 w-7" src="/images/icon-check.svg"/>
+               <img className="h-7 w-7" src={TICK}/>
      </div>
           :
       <div className=" mx-[20px] h-7 w-7 bg-[#83a8ff] border-2 border-solid border-white rounded-full" onClick={()=>toggleStatus(t.id)}>

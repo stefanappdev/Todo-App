@@ -1,4 +1,5 @@
 import Todo from "../types/todo";
+import '../styles/App.css'
 import CompleteTodo from "./CompleteTodo"
 import { Removetodo,RemoveAlltodos, RemoveCompletedtodos    } from "./Removetodo";
 import { Addnewtodo } from "./Addnewtodo";
@@ -27,7 +28,7 @@ function List (){
     const [isEditting,setIsEditting]=useState(false);
     const editRef=useRef<HTMLInputElement>(null);
     const [Text,setText]=useState("")
-    let dragSrc:any;
+    let dragsrcElement:HTMLElement|null;
 
 
 
@@ -91,7 +92,7 @@ function List (){
     
         return <div key={view.id}>
             
-           <span className={view.isActive?"text-blue-700 font-bold":""}
+           <span className={view.isActive?"text-blue-700 cursor-pointer font-bold":"cursor-pointer"}
 
             onClick={()=>{
                 if(view.name==="Complete"){
@@ -137,15 +138,22 @@ function List (){
     
     const renderedList = listToRender.map(t=>{
 
+       
+
         return <li className={
             TC.isDark?
-            `w-[85%] h-[50px] border-b-[1px] border-white  bg-[#25273c]  inline-flex items-center justify-evenly pr-[30px]
-             
+            `w-[60%] h-[50px] border-b-[1px] border-white  bg-[#25273c]  inline-flex items-center justify-evenly pr-[30px]
+            sm:w-[500px]
+            md:w-[55%] 
+            lg:w-[55%]
             `
             
             :
-            `w-[85%] h-[50px] border-b-[1px]   border-white shadow-gray-500 shadow-lg bg-white inline-flex items-center justify-evenly pr-[30px]
-             `
+            `w-[60%] h-[50px] border-b-[1px]   border-white shadow-gray-500 shadow-lg bg-white inline-flex items-center justify-evenly pr-[30px]
+             sm:w-[500px]
+            md:w-[55%] 
+            lg:w-[55%]
+            `
             }
         key={t.id}>
 
@@ -161,7 +169,7 @@ function List (){
                      <div className="">           
                         {isEditting===false?
 
-                        <button className={TC.isDark?" text-white  font-bold mx-[20px]":" text-blue-500 mx-[20px] font-bold"} onClick={
+                        <button className={TC.isDark?" text-white cursor-pointer font-bold mx-[20px]":" text-blue-500 mx-[20px] cursor-pointer font-bold"} onClick={
                             ()=>{setIsEditting(true)
                             setCurrentTodo(t)
                             seteditText(t.text)
@@ -177,10 +185,28 @@ function List (){
                 </li>
     })
 
+
+
+    ///map over rendered list to add drag and drop functionality
+    
+          
+       
+
+
+
+
+    
+
     return(<>
         <div className={TC.isDark? 
-            "w-full px-[20px] h-[200px] text-white bg-cover  bg-no-repeat bg-[url(images/bg-mobile-dark.jpg)]  " :
-             "w-full px-[20px] h-[200px] text-black bg-cover bg-no-repeat bg-[url(images/bg-mobile-light.jpg)]"
+            `w-full px-[20px] h-[200px] text-white bg-cover  bg-no-repeat bg-[url(images/bg-mobile-dark.jpg)] 
+             lg:bg-cover lg:bg-no-repeat lg:bg-[url(images/bg-desktop-dark.jpg)]
+            `
+                
+            :
+             `w-full px-[20px] h-[200px] text-black bg-cover bg-no-repeat bg-[url(images/bg-mobile-light.jpg)]
+             lg:bg-cover lg:bg-no-repeat lg:bg-[url(images/bg-desktop-light.jpg)]
+             `
              
              
              }>
@@ -189,7 +215,7 @@ function List (){
 
            <div className="flex items-center justify-evenly"> 
             <h1 className='text-center text-4xl font-bold text-white ' >T O D O</h1>
-            <img className=" w-[20px] h-[20px] mx-[25px] " src={TC.isDark?"/images/icon-sun.svg":"/images/icon-moon.svg"} alt="toggle theme" onClick={TC.toggleTheme}/>
+            <img className=" w-[20px] cursor-pointer h-[20px] mx-[25px] " src={TC.isDark?"/images/icon-sun.svg":"/images/icon-moon.svg"} alt="toggle theme" onClick={TC.toggleTheme}/>
            
            </div>
            
@@ -204,10 +230,10 @@ function List (){
                 
                 <div >
                     
-                    <input className={TC.isDark?"text-white bg-[#25273c] rounded-sm h-[40px] w-[200px] mx-2":
+                    <input  className={TC.isDark?"text-white bg-[#25273c] rounded-sm h-[40px] w-[200px] mx-2":
                                     "text-black bg-white rounded-sm h-[40px] w-[200px] mx-2"} 
                                     
-                    id="todo" 
+                    id="add-todo" 
                     name="todo" 
                     placeholder="Create a new todo.." 
                     onChange={e=>setText(e.target.value)} 
@@ -215,7 +241,7 @@ function List (){
                     value={Text}
                     />
 
-                    <button className="text-white bg-blue-700 font-bold rounded-sm h-[40px] w-[85px] mx-2">
+                    <button className="text-white cursor-pointer bg-blue-700 font-bold rounded-sm h-[40px] w-[85px] mx-2">
                          Add
                     </button>
                 </div>
@@ -231,13 +257,13 @@ function List (){
 
             <>
                 <h1 className={TC.isDark?"text-xl text-center font-bold my-[20px] text-white"
-                :"text-xl text-center font-bold my-[20px] text-white"}>
+                :"text-xl text-center cursor-pointer font-bold my-[20px] text-white"}>
                     Edit Todo
                 </h1>
             <form onSubmit={HandleEditSubmit} id="edit-todo-form" className="inline-flex justify-center w-full items-center my-[20px]">
              <input className={TC.isDark?"text-white bg-[#25273c] rounded-sm h-[40px] w-[200px] mx-2":
                                     "text-black bg-white rounded-sm h-[40px] w-[200px] mx-2"} 
-                    id="todo" 
+                    id="edit-todo" 
                     name="edit" 
                     placeholder="Enter your todo"
                     onChange={e=>seteditText(e.target.value)} 
@@ -245,8 +271,8 @@ function List (){
                     ref={editRef}
                     value={editText}
                     />
-            <button className="text-white bg-blue-700 font-bold rounded-sm h-[40px] w-[85px] mx-2" type="submit">ok</button>   
-
+            <button className="text-white bg-blue-700 font-bold cursor-pointer rounded-sm h-[40px] w-[85px] mx-2" type="submit">ok</button>   
+            <button className="text-white bg-red-500 cursor-pointer font-bold rounded-sm h-[40px] w-[85px] mx-2" onClick={()=>setIsEditting(false)}>cancel</button>      
         </form></>}
 
         </div>

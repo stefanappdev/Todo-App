@@ -12,7 +12,7 @@ const [isCompleted,setisCompleted]=useState(false);
 
  const toggleStatus=(id:number)=>{
 
-          let target=todos.find(t=>t.id===id);
+          let target=todos.find(t => t.id===id);
 
           if (!target){
             return;
